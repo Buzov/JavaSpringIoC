@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-4.1.xsd">
+    
+    <bean id="print1" class="Main.Printer">
+        <!--Поскольку передаваемы параметры разного типа, то автоматически определяется куда их нужно передать в конструкторе-->
+        <constructor-arg value="Hello world!!!"/><!--Передаем параметр в конструктор-->
+        <constructor-arg value="2"/><!--Передаем параметр в конструктор-->
+        <property name="c" value="250"/><!--Устанавливаем через сетер значение поля класса-->
+        <!--
+        <property name="innerClass">Устанавливаем через сетер значение поля, которое не является примитивным типом
+            <bean id="id_bean" class="Main.InnerClass">прописываем бин как внутренний, но его можно сделать и внешним
+                <constructor-arg value="InnerClass"/>
+            </bean>
+        </property>
+        -->
+        <property name="list"><!--Устанавливаем через сетер значение поля, которое не является примитивным типом-->
+            <list>
+                <value>значение 1</value>
+                <value>значение 2</value>
+                <value>значение 3</value>
+                <value>значение 4</value>
+                <value>значение 5</value>
+            </list>      
+        </property>
+        
+        <!--Устанавливаем через сетер значение поля, которое не является примитивным типом-->
+        
+        <!--
+        <property name="listInnerClass">
+            <list>
+                
+                <ref>idInnerClass1</ref>
+                <ref>idInnerClass2</ref>
+                
+                <bean id="id1" class="Main.InnerClass">
+                    <constructor-arg value="InnerClassList"/>
+                </bean>
+            </list>      
+        </property>
+        -->
+        
+        <!--
+        <property name="innerClass" ref="id_bean">Устанавливаем через сетер значение поля, которое не является примитивным типом
+            <bean id="id_bean" class="Main.InnerClass"/>прописываем бин как внутренний, но его можно сделать и внешним
+        </property>
+        -->
+    </bean>
+    
+    <bean id="idInnerClass1" class="Main.InnerClass">
+        <constructor-arg value="InnerClass1"/>
+    </bean>
+    <bean id="idInnerClass2" class="Main.InnerClass">
+        <constructor-arg value="InnerClass2"/>
+    </bean>
+    
+    
+    
+    <bean id="print2" class="Main.Printer">
+        <!--Указываем конкретные названия параметров конструктора класса-->
+        <constructor-arg name="s" value="Hello world!!!"/>
+        <constructor-arg name="a" value="2"/>
+        <constructor-arg name="b" value="2"/>
+    </bean>
+     
+    <bean id="print3" class="Main.Printer">
+        <!--Указываем конкретные названия параметров конструктора класса и их тип-->
+        <constructor-arg name="s" type="String" value="Hello world!!!"/>
+        <constructor-arg name="a" type="int" value="2"/>
+        <constructor-arg name="b" type="int" value="2"/>
+    </bean>
+    
+    <bean id="print4" class="Main.Printer">
+        <!--Указываем порядок передаваемых параметров в конструктор-->
+        <constructor-arg index="0" value="Eeeeeeee!!!"/>
+        <constructor-arg index="1" value="215"/>
+        <constructor-arg index="2" value="215"/>
+    </bean>
+    
+    <bean id="single" class="Main.Single" factory-method="getInstance"/>
+    
+    
+    <!--переименовываем бин-->
+    <!--<alias name="single" alias="new_sigle"/>-->
+    
+    <beans id="aop" class="Main.AOPClass"/>
+    <beans id="proxy" class="org.springframework.aop.framework.ProxyFactoryBean">
+        <property name="target" ref="single"/>
+        <property name="interceptorNames">
+            <list>
+                <value>aop</value>
+            </list>
+        </property>
+    </beans>
+    
+    
+    <!--используем методы инициализации и завершения работы с объектом-->
+    <!--lazy-init="true" подгрузка объекта производиться только в момент использования, а не при подгрузке xml-->
+    <bean id="initClass" class="Main.InitClass" init-method="init" destroy-method="destroy" lazy-init="true"/>
+    
+    <!--
+    <bean id="close_class" class="Main.CloseClass" factory-method="getInstance" factory-bean="factory"/>
+    
+    <bean id="factory" class="Main.FactoryClass"/>
+    -->
+    
+</beans>
+
+
